@@ -4,12 +4,28 @@ import DashboardButton from "./DashboardButton";
 
 import { dashboardImages } from "../../data/dashboard/dashboardImage";
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }) => {
+  const renderButtonItem = (itemData) => {
+    const pressButtonHandler = () => {
+      navigation.navigate("DetailsScreen", {
+        appID: itemData.item.id,
+      });
+    };
+
+    return (
+      <DashboardButton
+        onPress={pressButtonHandler}
+        itemData={itemData}
+        navigation={navigation}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={dashboardImages}
-        renderItem={(itemData) => <DashboardButton itemData={itemData} />}
+        renderItem={renderButtonItem}
         keyExtractor={(item) => item.id}
         numColumns="2"
       />

@@ -1,26 +1,12 @@
-import {
-  TouchableWithoutFeedback,
-  Image,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { Pressable, Image, StyleSheet, Dimensions } from "react-native";
 import React from "react";
-// import styled from "styled-components/native";
-
-// const ButtonContainer = styled.View`
-//   border-radius: 5px;
-//   background-color: #fff;
-//   height: 150px;
-//   padding-horizontal: 10px;
-// `;
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-const DashboardButton = ({ itemData, index }) => {
-  //   console.log(itemData.item.id); // crucial //
+const DashboardButton = ({ itemData, index, onPress }) => {
   return (
-    <TouchableWithoutFeedback onPress={() => console.log("hello")}>
+    <Pressable onPress={onPress}>
       <Image
         style={[
           styles.buttonImg,
@@ -32,7 +18,7 @@ const DashboardButton = ({ itemData, index }) => {
         resizeMode="contain"
         source={itemData.item.img}
       />
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 };
 

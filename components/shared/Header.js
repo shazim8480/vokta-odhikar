@@ -9,13 +9,13 @@ import { StatusBar } from "expo-status-bar";
 const HeaderContainer = styled.View`
   width: 100%;
   background-color: ${colors.primary};
-  padding-top: 25px;
+  padding-top: 20px;
 `;
 
 const HeaderBackground = styled.View`
   width: 100%;
   padding-horizontal: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
   background-color: ${colors.header_bg};
   height: 70px;
   justify-content: space-around;
@@ -32,7 +32,7 @@ const HeaderText = styled.Text`
 const Header = () => {
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <HeaderContainer>
         <HeaderBackground>
           <Image source={require("../../assets/icons/govt_logo.png")} />

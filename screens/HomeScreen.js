@@ -13,10 +13,10 @@ const HomeBackground = styled.View`
   align-items: flex-start;
 `;
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <HomeBackground>
-      <Dashboard />
+      <Dashboard navigation={navigation} />
     </HomeBackground>
   );
 };
