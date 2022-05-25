@@ -1,21 +1,45 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import React from "react";
-import ComplaintScreen from "./ComplaintScreen";
+// import ComplaintScreen from "./ComplaintScreen";
+
+import { dashboardImages } from "../data/dashboard/dashboardImage";
+import CategoryDetails from "../components/CategoryDetails/CategoryDetails";
 
 const DetailsScreen = ({ route }) => {
   const appID = route.params.appID; // comes from DashboardButton press navigation Handler//
 
-  return (
-    <>
-      {/* <View>
-        <Text>DetailsScreen - {appID}</Text>
-      </View> */}
+  // render component for loading separate app button data//
 
-      <ComplaintScreen />
-    </>
+  const displayAppButtonData = dashboardImages.filter((dashboardItem) => {
+    // checking the specific id of the button if it exists in the data //
+    return dashboardItem.id.indexOf(appID) >= 0;
+  });
+
+  const renderAppButtonData = (itemData) => {
+    console.log(itemData.item.subtitle);
+    return (
+      <CategoryDetails
+        subtitle={itemData.item.subtitle}
+        title={itemData.item.title}
+      />
+    );
+  };
+
+  return (
+    <View styles={styles.container}>
+      <FlatList
+        data={displayAppButtonData}
+        renderItem={renderAppButtonData}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 };
 
 export default DetailsScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
