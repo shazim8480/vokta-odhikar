@@ -16,13 +16,8 @@ const DetailsScreen = ({ route }) => {
   });
 
   const renderAppButtonData = (itemData) => {
-    console.log(itemData.item.subtitle);
-    return (
-      <CategoryDetails
-        subtitle={itemData.item.subtitle}
-        title={itemData.item.title}
-      />
-    );
+    // console.log(itemData.item.subtitle);
+    return <CategoryDetails facts={itemData.item.facts} />;
   };
 
   return (
