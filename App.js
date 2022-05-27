@@ -1,5 +1,6 @@
 import Header from "./components/shared/Header";
 import HomeScreen from "./screens/HomeScreen";
+import { NativeBaseProvider } from "native-base";
 
 // import RightsScreen from "./screens/RightsScreen";
 // import CrimeScreen from "./screens/CrimeScreen";
@@ -17,7 +18,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
+    <NativeBaseProvider>
       <NavigationContainer>
         {/* <Header /> */}
         <Stack.Navigator>
@@ -34,6 +35,6 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </NativeBaseProvider>
   );
 }

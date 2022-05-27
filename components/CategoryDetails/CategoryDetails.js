@@ -24,6 +24,7 @@ const CategoryDetails = ({ facts }) => {
 
   // accordion click on change modifier
   const setSections = (sections) => {
+    console.log(sections.length);
     //setting up a active section state
     setActiveSections(sections.includes(undefined) ? [] : sections);
   };
@@ -51,9 +52,8 @@ const CategoryDetails = ({ facts }) => {
         transition="backgroundColor"
       >
         <Animatable.Text
-          // key={index}
-          animation={isActive ? "bounceIn" : undefined}
-          style={{ textAlign: "left", fontWeight: "500", color: "gray" }}
+          animation={isActive ? "fadeIn" : undefined}
+          style={{ textAlign: "left", fontWeight: "600", color: "gray" }}
         >
           {section.description}
         </Animatable.Text>
@@ -74,7 +74,7 @@ const CategoryDetails = ({ facts }) => {
             sections={facts}
             //title and content of accordion
             touchableComponent={TouchableOpacity}
-            //Do you want to expand mutiple at a time or single at a time
+            //Do you want to expand multiple at a time or single at a time
             renderHeader={renderHeader}
             //Header Component(View) to render
             renderContent={renderContent}
@@ -100,8 +100,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   headerText: {
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 16,
+    marginLeft: 13,
     fontWeight: "700",
   },
   content: {
@@ -114,11 +115,5 @@ const styles = StyleSheet.create({
   },
   inactive: {
     backgroundColor: "rgba(245,252,255,1)",
-  },
-  selectTitle: {
-    fontSize: 14,
-    fontWeight: "500",
-    padding: 10,
-    textAlign: "center",
   },
 });

@@ -5,6 +5,8 @@ import React from "react";
 import { dashboardImages } from "../data/dashboard/dashboardImage";
 import CategoryDetails from "../components/CategoryDetails/CategoryDetails";
 
+import ContactScreen from "./ContactScreen";
+
 const DetailsScreen = ({ route }) => {
   const appID = route.params.appID; // comes from DashboardButton press navigation Handler//
 
@@ -16,8 +18,15 @@ const DetailsScreen = ({ route }) => {
   });
 
   const renderAppButtonData = (itemData) => {
-    // console.log(itemData.item.subtitle);
-    return <CategoryDetails facts={itemData.item.facts} />;
+    return (
+      <>
+        {itemData.item.id == 6 ? (
+          <ContactScreen information={itemData.item.information} />
+        ) : (
+          <CategoryDetails facts={itemData.item.facts} />
+        )}
+      </>
+    );
   };
 
   return (
