@@ -1,26 +1,32 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { Image } from "react-native";
 import React from "react";
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Dimensions, StatusBar } from "react-native";
 import styled from "styled-components/native";
-
 import { colors } from "../../constants/colors";
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
+import Constants from "expo-constants";
 
-const HeaderContainer = styled.View`
-  width: 100%;
-  background-color: ${colors.primary};
-  padding-top: 20px;
+const SCREEN_WIDTH = Dimensions.get("window").width;
+
+const headerHeight = 60;
+
+const StatusBarBackground = styled.View`
+  background: ${colors.primary};
+  padding-top: ${Platform.OS === "ios" ? Constants.statusBarHeight : 0}px;
+  margin-right: ${Platform.OS === "android" ? 65 : 0}px;
+  height: ${Platform.OS === "ios"
+    ? Constants.statusBarHeight + headerHeight
+    : headerHeight + 10}px;
 `;
 
 const HeaderBackground = styled.View`
-  width: 100%;
-  padding-horizontal: 20px;
-  margin-top: 10px;
-  background-color: ${colors.header_bg};
-  height: 70px;
+background-color: ${colors.header_bg}
+  width: ${SCREEN_WIDTH}px;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  flex-direction: row;
+  height: 100%
 `;
 
 const HeaderText = styled.Text`
@@ -32,13 +38,15 @@ const HeaderText = styled.Text`
 const Header = () => {
   return (
     <>
-      <StatusBar style="dark" />
-      <HeaderContainer>
-        <HeaderBackground>
-          <Image source={require("../../assets/icons/govt_logo.png")} />
-          <HeaderText>জাতীয় ভোক্তা অধিকার ও অভিযোগ</HeaderText>
-        </HeaderBackground>
-      </HeaderContainer>
+      <StatusBarBackground>
+        <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
+        <SafeAreaView>
+          <HeaderBackground>
+            <Image source={require("../../assets/icons/govt_logo.png")} />
+            <HeaderText>জাতীয় ভোক্তা অধিকার ও অভিযোগ</HeaderText>
+          </HeaderBackground>
+        </SafeAreaView>
+      </StatusBarBackground>
     </>
   );
 };

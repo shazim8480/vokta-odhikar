@@ -6,7 +6,6 @@ import {
   AspectRatio,
   Text,
   Center,
-  HStack,
   VStack,
   Stack,
 } from "native-base";
@@ -18,8 +17,8 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 // image container //
 
 const ImageContainer = styled.View`
-  max-width: ${SCREEN_WIDTH};
-  max-height: ${SCREEN_WIDTH / 3};
+  width: ${SCREEN_WIDTH}px;
+  height: ${SCREEN_WIDTH / 2}px;
 `;
 
 const ContactInfo = ({ info }) => {
@@ -40,9 +39,9 @@ const ContactInfo = ({ info }) => {
               <Image
                 style={{
                   width: SCREEN_WIDTH,
-                  height: SCREEN_WIDTH / 2,
+                  height: "100%",
                 }}
-                resizeMode="contain"
+                resizeMode="cover"
                 source={info.image}
                 alt="image"
               />
@@ -105,12 +104,6 @@ const ContactInfo = ({ info }) => {
               </Text>
             )}
           </VStack>
-
-          {/* <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center">
-              <Text color="coolGray.500">6 mins ago</Text>
-            </HStack>
-          </HStack> */}
         </Stack>
       </Box>
     </Box>

@@ -1,5 +1,5 @@
 // import React in our code
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // import all the components we are going to use
 import {
@@ -19,12 +19,15 @@ import Accordion from "react-native-collapsible/Accordion";
 // import FactsCollapsible from "./FactsCollapsible";
 
 const CategoryDetails = ({ facts }) => {
+  // console.log(facts);
   // default active selector
   const [activeSections, setActiveSections] = useState([]);
-
+  // useEffect(() => {
+  //   facts.length == 1 ? setActiveSections(facts) : setActiveSections([]);
+  // }, [activeSections]);
   // accordion click on change modifier
   const setSections = (sections) => {
-    console.log(sections.length);
+    // console.log(sections);
     //setting up a active section state
     setActiveSections(sections.includes(undefined) ? [] : sections);
   };
