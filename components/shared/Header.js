@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Dimensions, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import { colors } from "../../constants/colors";
-// import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -24,15 +23,16 @@ const HeaderBackground = styled.View`
 background-color: ${colors.header_bg}
   width: ${SCREEN_WIDTH}px;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  height: 100%
+  height: 100%;
 `;
 
 const HeaderText = styled.Text`
   color: ${colors.primary};
   font-size: 16px;
   font-weight: bold;
+  margin-left: 15px;
 `;
 
 const Header = () => {

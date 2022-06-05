@@ -1,13 +1,15 @@
-// import { View, TouchableOpacity, Text } from "react-native";
+import { Dimensions } from "react-native";
 import React from "react";
 
 import styled from "styled-components/native";
 
 import { colors } from "../../constants/colors";
 
+const SCREEN_WIDTH = Dimensions.get("window").width;
+
 const ButtonContainer = styled.TouchableOpacity`
-  margin-vertical: 20px;
-  width: 120px;
+  margin-top: 20px;
+  width: ${SCREEN_WIDTH / 1.11}px;
   height: 40px;
   padding: 12px;
   border-radius: 6px;
@@ -19,10 +21,14 @@ const ButtonText = styled.Text`
   text-align: center;
 `;
 
-const MainButton = ({ title }) => {
+const MainButton = (props) => {
   return (
-    <ButtonContainer activeOpacity={0.7}>
-      <ButtonText>{title}</ButtonText>
+    <ButtonContainer
+      style={{ ...props.style }}
+      onPress={props.onPress}
+      activeOpacity={0.7}
+    >
+      <ButtonText>{props.title}</ButtonText>
     </ButtonContainer>
   );
 };

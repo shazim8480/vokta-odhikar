@@ -9,6 +9,9 @@ const Input = (props) => {
         placeholder={props.placeholder}
         multiline={props.multiline}
         numberOfLines={props.numberOfLines}
+        onChange={props.onChangeText}
+        keyboardType={props.keyboardType}
+        value={props.value}
         {...props}
         height={props.height}
       />
