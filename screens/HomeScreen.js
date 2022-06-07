@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 
 import { colors } from "../constants/colors";
 import Dashboard from "../components/dashboard/Dashboard";
+import AppLoader from "../components/shared/AppLoader";
 
 const HomeBackground = styled.View`
   background-color: ${colors.body};
