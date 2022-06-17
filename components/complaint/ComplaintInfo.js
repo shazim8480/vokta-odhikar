@@ -11,6 +11,7 @@ import AppLoader from "../shared/AppLoader";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const complaintDataSchema = yup.object({
+  document: yup.string().required("রশিদ সংযুক্ত করুন*"),
   companyName: yup.string().required("প্রতিষ্ঠানের নাম আবশ্যক*"),
   companyAddress: yup.string().required("প্রতিষ্ঠানের ঠিকানা আবশ্যক*"),
   complaint: yup.string().required("অভিযোগের বিবরণ আবশ্যক*"),
@@ -89,6 +90,11 @@ const ComplaintInfo = ({ navigation }) => {
                   title="প্রমাণস্বরূপ ক্রয়ের ভাউচার/রশিদ সংযুক্ত করতে হবে"
                   onPress={pickDocument}
                 />
+                {props.touched.document && props.errors.document && (
+                  <Text style={styles.errorMessage}>
+                    {props.errors.document}
+                  </Text>
+                )}
                 <Input
                   onChangeText={props.handleChange("companyName")}
                   onBlur={props.handleBlur("companyName")}

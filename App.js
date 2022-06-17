@@ -1,9 +1,9 @@
-import * as React from "react";
-// import { useState, useEffect } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "./components/shared/Header";
 import HomeScreen from "./screens/HomeScreen";
 import { NativeBaseProvider } from "native-base";
-import { Linking, Platform } from "react-native";
+import { Linking, Platform, View } from "react-native";
 import { colors } from "./constants/colors";
 import { FontAwesome } from "@expo/vector-icons";
 import DetailsScreen from "./screens/DetailsScreen";
@@ -45,9 +45,9 @@ const DetailsNavigator = ({ navigation, route }) => {
 const openDialScreen = () => {
   let number = "";
   if (Platform.OS === "ios") {
-    number = "telprompt:${16121}";
+    number = "telprompt:${01777753668}";
   } else {
-    number = "tel:${16121}";
+    number = "tel:${01777753668}";
   }
   Linking.openURL(number);
 };
@@ -57,7 +57,6 @@ function BottomTabNavigators({ navigation, route }) {
     <BottomTab.Navigator
       screenOptions={{
         headerShown: false,
-        // tabBarLabelPosition: "beside-icon",
         tabBarInactiveTintColor: "#fff",
         tabBarActiveTintColor: "#fff",
         tabBarStyle: {
@@ -120,6 +119,36 @@ function BottomTabNavigators({ navigation, route }) {
 }
 
 export default function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Keep the splash screen visible while we fetch resources
+        await SplashScreen.preventAutoHideAsync();
+        // Artificially delay for two seconds
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+        SplashScreen.hideAsync(); // Tell the application to render
+      }
+    }
+
+    prepare();
+  }, []);
+
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (appIsReady) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [appIsReady]);
+
+  // if (!appIsReady) {
+  //   return null;
+  // }
+
   return (
     <NativeBaseProvider>
       <NavigationContainer>

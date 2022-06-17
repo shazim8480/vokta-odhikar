@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
+// import * as SplashScreen from "expo-splash-screen";
 import React from "react";
 // import ComplaintScreen from "./ComplaintScreen";
 
