@@ -1,5 +1,5 @@
 import { StyleSheet, View, Dimensions, Button, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MainTitle from "../shared/MainTitle";
 import Input from "../shared/Input";
 import * as DocumentPicker from "expo-document-picker";
@@ -7,18 +7,19 @@ import MainButton from "../shared/MainButton";
 import { Formik } from "formik";
 import * as yup from "yup";
 import AppLoader from "../shared/AppLoader";
+import { formPost } from "./formpost";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const complaintDataSchema = yup.object({
-  document: yup.string().required("রশিদ সংযুক্ত করুন*"),
-  companyName: yup.string().required("প্রতিষ্ঠানের নাম আবশ্যক*"),
-  companyAddress: yup.string().required("প্রতিষ্ঠানের ঠিকানা আবশ্যক*"),
+  // userfile1: yup.string().required("রশিদ সংযুক্ত করুন*"),
+  inst_name: yup.string().required("প্রতিষ্ঠানের নাম আবশ্যক*"),
+  inst_address: yup.string().required("প্রতিষ্ঠানের ঠিকানা আবশ্যক*"),
   complaint: yup.string().required("অভিযোগের বিবরণ আবশ্যক*"),
   name: yup.string().required("অভিযোগকারীর নাম আবশ্যক*"),
-  fatherName: yup.string().required("পিতার নাম আবশ্যক*"),
-  motherName: yup.string().required("মাতার নাম আবশ্যক*"),
-  presentAddress: yup.string().required("বর্তমান ঠিকানা আবশ্যক*"),
+  f_name: yup.string().required("পিতার নাম আবশ্যক*"),
+  m_name: yup.string().required("মাতার নাম আবশ্যক*"),
+  p_address: yup.string().required("বর্তমান ঠিকানা আবশ্যক*"),
   permanentAddress: yup.string().required("স্থায়ী ঠিকানা আবশ্যক*"),
   occupation: yup.string().required("পেশার নাম আবশ্যক*"),
   mobile: yup.number().required("মোবাইল নম্বর আবশ্যক*"),
@@ -27,15 +28,28 @@ const complaintDataSchema = yup.object({
 });
 
 const ComplaintInfo = ({ navigation }) => {
+  const [userfile1, setUserfile1] = useState();
+
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
-    setDocument(result);
-    console.log(result);
+    setUserfile1(result);
+    // console.log(result);
   };
 
-  const [document, setDocument] = useState();
   // const [isSubmitted, setIsSubmitted] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const [endpoint, setEndpoint] = useState();
+
+  // call for form submission API
+  useEffect(() => {
+    const uri = `https://exabytelab.com.bd/vokta/rest/api/url`;
+    fetch(uri)
+      .then((res) => res.json())
+      // .then((data) => console.log(data[0].url));
+      // set Data to endpoint//
+      .then((data) => setEndpoint(data[0].url));
+  }, []);
 
   const startLoading = () => {
     setLoading(true);
@@ -43,6 +57,52 @@ const ComplaintInfo = ({ navigation }) => {
       setLoading(false);
       navigation.navigate("home");
     }, 3000);
+  };
+
+  const formSubmission = (values, actions) => {
+    actions.resetForm();
+    // console.log(values);
+    /* Then create a new FormData obj */
+    let formData = new FormData();
+    /* FormData requires name: id */
+    formData.append("VO", "complain");
+
+    var num_att;
+
+    if (userfile1) {
+      num_att = 1;
+      formData.append("userfile1", {
+        type: userfile1.mimeType,
+        uri: userfile1.uri,
+        name: userfile1.name,
+      });
+    } else num_att = 0;
+
+    /* append input field values to formData */
+    for (let value in values) {
+      formData.append(value, values[value]);
+    }
+
+    formData.append("num_att", num_att);
+
+    var u_id = "1";
+    // static u_id//
+    formData.append("u_id", u_id);
+    /* Now POST your formData: */
+    // formPost(endpoint, formData);
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        console.log(this.responseText);
+      }
+    });
+    xhr.open("POST", endpoint);
+    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    console.log(formData);
+    xhr.send(formData);
+
+    startLoading();
   };
 
   return (
@@ -54,27 +114,27 @@ const ComplaintInfo = ({ navigation }) => {
       ) : (
         <Formik
           initialValues={{
-            companyName: "",
-            companyAddress: "",
-            complaint: "",
-            name: "",
-            fatherName: "",
-            motherName: "",
-            presentAddress: "",
-            permanentAddress: "",
-            occupation: "",
-            mobile: "",
-            email: "",
-            nid: "",
-            document: "",
+            inst_name: "asas",
+            inst_address: "asasa",
+            c_address: "ddwdwd",
+            inst_address: "effee",
+            complaint: "asass",
+            name: "asasa",
+            f_name: "saas",
+            m_name: "asas",
+            p_address: "ssasa",
+            permanentAddress: "sasa",
+            occupation: "asasa",
+            mobile: "12121212",
+            email: "asasa@dncrp.gov.bd",
+            nid: "121212",
           }}
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
-            actions.resetForm();
-            values.document = document;
-            console.log(values);
-            startLoading();
-            // navigation.navigate("home");
+            console.log(userfile1);
+            if (userfile1) {
+              formSubmission(values, actions);
+            } else alert("রশিদ সংযুক্ত করুন!");
           }}
         >
           {(props) => (
@@ -90,34 +150,33 @@ const ComplaintInfo = ({ navigation }) => {
                   title="প্রমাণস্বরূপ ক্রয়ের ভাউচার/রশিদ সংযুক্ত করতে হবে"
                   onPress={pickDocument}
                 />
-                {props.touched.document && props.errors.document && (
+                {/* {props.touched.userfile1 && props.errors.userfile1 && (
                   <Text style={styles.errorMessage}>
-                    {props.errors.document}
+                    {props.errors.userfile1}
                   </Text>
-                )}
+                )} */}
                 <Input
-                  onChangeText={props.handleChange("companyName")}
-                  onBlur={props.handleBlur("companyName")}
+                  onChangeText={props.handleChange("inst_name")}
+                  onBlur={props.handleBlur("inst_name")}
                   placeholder="অভিযুক্ত প্রতিষ্ঠানের নাম"
-                  value={props.values.companyName}
+                  value={props.values.inst_name}
                 />
-                {props.touched.companyName && props.errors.companyName && (
+                {props.touched.inst_name && props.errors.inst_name && (
                   <Text style={styles.errorMessage}>
-                    {props.errors.companyName}
+                    {props.errors.inst_name}
                   </Text>
                 )}
                 <Input
-                  onChangeText={props.handleChange("companyAddress")}
-                  onBlur={props.handleBlur("companyAddress")}
+                  onChangeText={props.handleChange("inst_address")}
+                  onBlur={props.handleBlur("inst_address")}
                   placeholder="অভিযুক্ত প্রতিষ্ঠানের ঠিকানা"
-                  value={props.values.companyAddress}
+                  value={props.values.inst_address}
                 />
-                {props.touched.companyAddress &&
-                  props.errors.companyAddress && (
-                    <Text style={styles.errorMessage}>
-                      {props.errors.companyAddress}
-                    </Text>
-                  )}
+                {props.touched.inst_address && props.errors.inst_address && (
+                  <Text style={styles.errorMessage}>
+                    {props.errors.inst_address}
+                  </Text>
+                )}
                 <Input
                   onChangeText={props.handleChange("complaint")}
                   onBlur={props.handleBlur("complaint")}
@@ -147,41 +206,36 @@ const ComplaintInfo = ({ navigation }) => {
                 )}
                 <View style={styles.nameInputContainer}>
                   <Input
-                    onChangeText={props.handleChange("fatherName")}
-                    onBlur={props.handleBlur("fatherName")}
+                    onChangeText={props.handleChange("f_name")}
+                    onBlur={props.handleBlur("f_name")}
                     placeholder="পিতার নাম"
-                    value={props.values.fatherName}
+                    value={props.values.f_name}
                   />
                   <Input
-                    onChangeText={props.handleChange("motherName")}
-                    onBlur={props.handleBlur("motherName")}
+                    onChangeText={props.handleChange("m_name")}
+                    onBlur={props.handleBlur("m_name")}
                     placeholder="মাতার নাম"
-                    value={props.values.motherName}
+                    value={props.values.m_name}
                   />
                 </View>
-                {props.touched.fatherName && props.errors.fatherName && (
-                  <Text style={styles.errorMessage}>
-                    {props.errors.fatherName}
-                  </Text>
+                {props.touched.f_name && props.errors.f_name && (
+                  <Text style={styles.errorMessage}>{props.errors.f_name}</Text>
                 )}
-                {props.touched.motherName && props.errors.motherName && (
-                  <Text style={styles.errorMessage}>
-                    {props.errors.motherName}
-                  </Text>
+                {props.touched.m_name && props.errors.m_name && (
+                  <Text style={styles.errorMessage}>{props.errors.m_name}</Text>
                 )}
                 <Input
-                  onChangeText={props.handleChange("presentAddress")}
-                  onBlur={props.handleBlur("presentAddress")}
+                  onChangeText={props.handleChange("p_address")}
+                  onBlur={props.handleBlur("p_address")}
                   multiline={true}
                   placeholder="বর্তমান ঠিকানা"
-                  value={props.values.presentAddress}
+                  value={props.values.p_address}
                 />
-                {props.touched.presentAddress &&
-                  props.errors.presentAddress && (
-                    <Text style={styles.errorMessage}>
-                      {props.errors.presentAddress}
-                    </Text>
-                  )}
+                {props.touched.p_address && props.errors.p_address && (
+                  <Text style={styles.errorMessage}>
+                    {props.errors.p_address}
+                  </Text>
+                )}
                 <Input
                   onChangeText={props.handleChange("permanentAddress")}
                   onBlur={props.handleBlur("permanentAddress")}
@@ -289,7 +343,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     marginLeft: "6%",
     color: "crimson",
-    fontWeight: "bold",
+    fontWeight: "600",
     marginTop: 7,
     paddingBottom: 8,
   },
