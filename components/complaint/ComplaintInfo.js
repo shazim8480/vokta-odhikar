@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Button, Text } from "react-native";
+import { StyleSheet, View, Dimensions, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import MainTitle from "../shared/MainTitle";
 import Input from "../shared/Input";
@@ -7,12 +7,21 @@ import MainButton from "../shared/MainButton";
 import { Formik } from "formik";
 import * as yup from "yup";
 import AppLoader from "../shared/AppLoader";
-import { formPost } from "./formpost";
+
+import {
+  FormControl,
+  Select,
+  Center,
+  CheckIcon,
+  WarningOutlineIcon,
+  VStack,
+  HStack,
+} from "native-base";
+// import { formPost } from "./formpost";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const complaintDataSchema = yup.object({
-  // userfile1: yup.string().required("রশিদ সংযুক্ত করুন*"),
   inst_name: yup.string().required("প্রতিষ্ঠানের নাম আবশ্যক*"),
   inst_address: yup.string().required("প্রতিষ্ঠানের ঠিকানা আবশ্যক*"),
   complaint: yup.string().required("অভিযোগের বিবরণ আবশ্যক*"),
@@ -25,13 +34,16 @@ const complaintDataSchema = yup.object({
   mobile: yup.number().required("মোবাইল নম্বর আবশ্যক*"),
   email: yup.string().email("অনুগ্রহ করে সঠিক ই-মেইল প্রদান করুন*"),
   nid: yup.number().required("জাতীয় পরিচয়পত্র নং আবশ্যক*"),
+  // officeAddress: yup.string().required("কার্যালয় নির্বাচন আবশ্যক*"),
 });
 
 const ComplaintInfo = ({ navigation }) => {
   const [userfile1, setUserfile1] = useState();
 
   const pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
+    let result = await DocumentPicker.getDocumentAsync({
+      type: "*/*",
+    });
     setUserfile1(result);
     // console.log(result);
   };
@@ -40,6 +52,10 @@ const ComplaintInfo = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const [endpoint, setEndpoint] = useState();
+
+  // state for selecting officeAddress //
+  let [officeAddress, setOfficeAddress] = useState("");
+  // console.log(officeAddress);
 
   // call for form submission API
   useEffect(() => {
@@ -78,6 +94,10 @@ const ComplaintInfo = ({ navigation }) => {
       });
     } else num_att = 0;
 
+    if (officeAddress) {
+      formData.append("officeAddress", officeAddress);
+    }
+
     /* append input field values to formData */
     for (let value in values) {
       formData.append(value, values[value]);
@@ -89,7 +109,6 @@ const ComplaintInfo = ({ navigation }) => {
     // static u_id//
     formData.append("u_id", u_id);
     /* Now POST your formData: */
-    // formPost(endpoint, formData);
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function () {
@@ -132,9 +151,14 @@ const ComplaintInfo = ({ navigation }) => {
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
             console.log(userfile1);
-            if (userfile1) {
+            console.log(officeAddress);
+            if (userfile1 && officeAddress) {
               formSubmission(values, actions);
-            } else alert("রশিদ সংযুক্ত করুন!");
+            } else if (!officeAddress) {
+              alert("কার্যালয় নির্বাচন আবশ্যক!");
+            } else if (!userfile1) {
+              alert("রশিদ সংযুক্ত করুন!");
+            }
           }}
         >
           {(props) => (
@@ -150,11 +174,6 @@ const ComplaintInfo = ({ navigation }) => {
                   title="প্রমাণস্বরূপ ক্রয়ের ভাউচার/রশিদ সংযুক্ত করতে হবে"
                   onPress={pickDocument}
                 />
-                {/* {props.touched.userfile1 && props.errors.userfile1 && (
-                  <Text style={styles.errorMessage}>
-                    {props.errors.userfile1}
-                  </Text>
-                )} */}
                 <Input
                   onChangeText={props.handleChange("inst_name")}
                   onBlur={props.handleBlur("inst_name")}
@@ -177,6 +196,61 @@ const ComplaintInfo = ({ navigation }) => {
                     {props.errors.inst_address}
                   </Text>
                 )}
+
+                <HStack paddingTop="15px" paddingBottom="5px">
+                  <VStack justifyContent="flex-start" alignItems="center">
+                    <FormControl paddingLeft="22px">
+                      <FormControl.Label>
+                        কার্যালয় নির্বাচন করুন
+                      </FormControl.Label>
+                      <Select
+                        minWidth="200"
+                        accessibilityLabel="কার্যালয় সমূহ"
+                        placeholder="কার্যালয় সমূহ"
+                        _selectedItem={{
+                          bg: "white",
+                          endIcon: <CheckIcon size={5} />,
+                        }}
+                        selectedValue={officeAddress}
+                        value={props.values.officeAddress}
+                        onValueChange={(itemValue) =>
+                          setOfficeAddress(itemValue)
+                        }
+                        mt="0.5"
+                      >
+                        <Select.Item
+                          label="ঢাকা বিভাগীয় কার্যালয়"
+                          value="ঢাকা"
+                        />
+                        <Select.Item
+                          label="রাজশাহী বিভাগীয় কার্যালয়"
+                          value="রাজশাহী"
+                        />
+                        <Select.Item
+                          label="খুলনা বিভাগীয় কার্যালয়"
+                          value="খুলনা"
+                        />
+                        <Select.Item
+                          label="রংপুর বিভাগীয় কার্যালয়"
+                          value="রংপুর"
+                        />
+                        <Select.Item
+                          label="বরিশাল বিভাগীয় কার্যালয়"
+                          value="বরিশাল"
+                        />
+                        <Select.Item
+                          label="সিলেট বিভাগীয় কার্যালয়"
+                          value="সিলেট"
+                        />
+                        <Select.Item
+                          label="চট্টগ্রাম বিভাগীয় কার্যালয়"
+                          value="চট্টগ্রাম"
+                        />
+                      </Select>
+                    </FormControl>
+                  </VStack>
+                </HStack>
+
                 <Input
                   onChangeText={props.handleChange("complaint")}
                   onBlur={props.handleBlur("complaint")}

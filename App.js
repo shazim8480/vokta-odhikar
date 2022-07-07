@@ -1,4 +1,3 @@
-import * as SplashScreen from "expo-splash-screen";
 import React, { useCallback, useEffect, useState } from "react";
 import Header from "./components/shared/Header";
 import HomeScreen from "./screens/HomeScreen";
@@ -10,6 +9,7 @@ import DetailsScreen from "./screens/DetailsScreen";
 import ComplaintScreen from "./screens/ComplaintScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as SplashScreen from "expo-splash-screen";
 import { Feather } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -124,13 +124,15 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
+        // console.log("splash on try");
         // Keep the splash screen visible while we fetch resources
-        await SplashScreen.preventAutoHideAsync();
-        // Artificially delay for two seconds
+        SplashScreen.preventAutoHideAsync();
+        // Artificially delay for 3 seconds
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } catch (e) {
         console.warn(e);
       } finally {
+        // console.log("splash on finally");
         setAppIsReady(true);
         SplashScreen.hideAsync(); // Tell the application to render
       }
@@ -138,16 +140,6 @@ export default function App() {
 
     prepare();
   }, []);
-
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (appIsReady) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [appIsReady]);
-
-  // if (!appIsReady) {
-  //   return null;
-  // }
 
   return (
     <NativeBaseProvider>
