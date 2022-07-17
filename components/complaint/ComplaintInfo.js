@@ -2,22 +2,13 @@ import { StyleSheet, View, Dimensions, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import MainTitle from "../shared/MainTitle";
 import Input from "../shared/Input";
-import * as DocumentPicker from "expo-document-picker";
 import MainButton from "../shared/MainButton";
 import { Formik } from "formik";
 import * as yup from "yup";
 import AppLoader from "../shared/AppLoader";
 
-import {
-  FormControl,
-  Select,
-  Center,
-  CheckIcon,
-  WarningOutlineIcon,
-  VStack,
-  HStack,
-} from "native-base";
-// import { formPost } from "./formpost";
+import { FormControl, Select, CheckIcon, VStack, HStack } from "native-base";
+import ImageList from "./ImageList";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -34,21 +25,12 @@ const complaintDataSchema = yup.object({
   mobile: yup.number().required("মোবাইল নম্বর আবশ্যক*"),
   email: yup.string().email("অনুগ্রহ করে সঠিক ই-মেইল প্রদান করুন*"),
   nid: yup.number().required("জাতীয় পরিচয়পত্র নং আবশ্যক*"),
-  // officeAddress: yup.string().required("কার্যালয় নির্বাচন আবশ্যক*"),
 });
 
 const ComplaintInfo = ({ navigation }) => {
-  const [userfile1, setUserfile1] = useState();
+  const [userFiles, setUserFiles] = useState([]);
+  // console.log(userFiles);
 
-  const pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({
-      type: "*/*",
-    });
-    setUserfile1(result);
-    // console.log(result);
-  };
-
-  // const [isSubmitted, setIsSubmitted] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const [endpoint, setEndpoint] = useState();
@@ -85,12 +67,15 @@ const ComplaintInfo = ({ navigation }) => {
 
     var num_att;
 
-    if (userfile1) {
-      num_att = 1;
-      formData.append("userfile1", {
-        type: userfile1.mimeType,
-        uri: userfile1.uri,
-        name: userfile1.name,
+    if (userFiles) {
+      num_att = userFiles.length;
+      userFiles.forEach((userfile, index) => {
+        // console.log(userfile);
+        formData.append(`userfile${index + 1}`, {
+          type: userfile.mimeType,
+          uri: userfile.uri,
+          name: userfile.name,
+        });
       });
     } else num_att = 0;
 
@@ -105,8 +90,8 @@ const ComplaintInfo = ({ navigation }) => {
 
     formData.append("num_att", num_att);
 
-    var u_id = "1";
     // static u_id//
+    var u_id = "1";
     formData.append("u_id", u_id);
     /* Now POST your formData: */
     var xhr = new XMLHttpRequest();
@@ -133,30 +118,30 @@ const ComplaintInfo = ({ navigation }) => {
       ) : (
         <Formik
           initialValues={{
-            inst_name: "asas",
-            inst_address: "asasa",
-            c_address: "ddwdwd",
-            inst_address: "effee",
-            complaint: "asass",
-            name: "asasa",
-            f_name: "saas",
-            m_name: "asas",
-            p_address: "ssasa",
-            permanentAddress: "sasa",
-            occupation: "asasa",
-            mobile: "12121212",
+            inst_name: "institute",
+            inst_address: "dhaka",
+            c_address: "dhaka",
+            complaint: "complaint",
+            name: "name",
+            f_name: "father",
+            m_name: "mother",
+            p_address: "present",
+            permanentAddress: "permanentAddress",
+            occupation: "occupation",
+            mobile: "88012121212",
             email: "asasa@dncrp.gov.bd",
             nid: "121212",
           }}
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
-            console.log(userfile1);
-            console.log(officeAddress);
-            if (userfile1 && officeAddress) {
+            // console.log(userfile1);
+            if (userFiles && officeAddress) {
               formSubmission(values, actions);
             } else if (!officeAddress) {
               alert("কার্যালয় নির্বাচন আবশ্যক!");
-            } else if (!userfile1) {
+            }
+            // issue here : userFiles empty is now showing alert //
+            else if (!userFiles) {
               alert("রশিদ সংযুক্ত করুন!");
             }
           }}
@@ -168,12 +153,14 @@ const ComplaintInfo = ({ navigation }) => {
                 <MainTitle>অভিযোগ</MainTitle>
               </View>
 
+              <View style={{ marginTop: 15 }}>
+                <FormControl.Label paddingLeft="22px">
+                  প্রমাণস্বরূপ রশিদের ছবি সংযুক্ত করুন
+                </FormControl.Label>
+                <ImageList userFiles={userFiles} setUserFiles={setUserFiles} />
+              </View>
+
               <View style={styles.inputContainer}>
-                <MainButton
-                  style={styles.button}
-                  title="প্রমাণস্বরূপ ক্রয়ের ভাউচার/রশিদ সংযুক্ত করতে হবে"
-                  onPress={pickDocument}
-                />
                 <Input
                   onChangeText={props.handleChange("inst_name")}
                   onBlur={props.handleBlur("inst_name")}
@@ -194,6 +181,17 @@ const ComplaintInfo = ({ navigation }) => {
                 {props.touched.inst_address && props.errors.inst_address && (
                   <Text style={styles.errorMessage}>
                     {props.errors.inst_address}
+                  </Text>
+                )}
+                <Input
+                  onChangeText={props.handleChange("c_address")}
+                  onBlur={props.handleBlur("c_address")}
+                  placeholder=""
+                  value={props.values.c_address}
+                />
+                {props.touched.c_address && props.errors.c_address && (
+                  <Text style={styles.errorMessage}>
+                    {props.errors.c_address}
                   </Text>
                 )}
 
