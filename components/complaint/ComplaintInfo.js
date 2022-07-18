@@ -36,17 +36,26 @@ const ComplaintInfo = ({ navigation }) => {
   const [endpoint, setEndpoint] = useState();
 
   // state for selecting officeAddress //
-  let [officeAddress, setOfficeAddress] = useState("");
+  const [officeAddress, setOfficeAddress] = useState([]);
   // console.log(officeAddress);
 
-  // call for form submission API
+  // state for selecting officeAddress value => email_address//
+  let [officeAddressValue, setOfficeAddressValue] = useState("");
+
   useEffect(() => {
+    // call for form submission API
     const uri = `https://exabytelab.com.bd/vokta/rest/api/url`;
     fetch(uri)
       .then((res) => res.json())
       // .then((data) => console.log(data[0].url));
-      // set Data to endpoint//
       .then((data) => setEndpoint(data[0].url));
+
+    // call office address API
+    const officeUri = `https://exabytelab.com.bd/vokta/rest/api/office_details`;
+    fetch(officeUri)
+      .then((res) => res.json())
+      // .then((data) => console.log(data));
+      .then((data) => setOfficeAddress(data));
   }, []);
 
   const startLoading = () => {
@@ -79,8 +88,8 @@ const ComplaintInfo = ({ navigation }) => {
       });
     } else num_att = 0;
 
-    if (officeAddress) {
-      formData.append("officeAddress", officeAddress);
+    if (officeAddressValue) {
+      formData.append("officeAddressValue_email", officeAddressValue);
     }
 
     /* append input field values to formData */
@@ -135,12 +144,12 @@ const ComplaintInfo = ({ navigation }) => {
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
             // console.log(userfile1);
-            if (userFiles && officeAddress) {
+            if (userFiles && officeAddressValue) {
               formSubmission(values, actions);
-            } else if (!officeAddress) {
+            } else if (!officeAddressValue) {
               alert("কার্যালয় নির্বাচন আবশ্যক!");
             }
-            // issue here : userFiles empty is now showing alert //
+            // issue here : userFiles empty is not showing alert //
             else if (!userFiles) {
               alert("রশিদ সংযুক্ত করুন!");
             }
@@ -209,41 +218,20 @@ const ComplaintInfo = ({ navigation }) => {
                           bg: "white",
                           endIcon: <CheckIcon size={5} />,
                         }}
-                        selectedValue={officeAddress}
-                        value={props.values.officeAddress}
+                        selectedValue={officeAddressValue}
+                        value={props.values.officeAddressValue}
                         onValueChange={(itemValue) =>
-                          setOfficeAddress(itemValue)
+                          setOfficeAddressValue(itemValue)
                         }
                         mt="0.5"
                       >
-                        <Select.Item
-                          label="ঢাকা বিভাগীয় কার্যালয়"
-                          value="ঢাকা"
-                        />
-                        <Select.Item
-                          label="রাজশাহী বিভাগীয় কার্যালয়"
-                          value="রাজশাহী"
-                        />
-                        <Select.Item
-                          label="খুলনা বিভাগীয় কার্যালয়"
-                          value="খুলনা"
-                        />
-                        <Select.Item
-                          label="রংপুর বিভাগীয় কার্যালয়"
-                          value="রংপুর"
-                        />
-                        <Select.Item
-                          label="বরিশাল বিভাগীয় কার্যালয়"
-                          value="বরিশাল"
-                        />
-                        <Select.Item
-                          label="সিলেট বিভাগীয় কার্যালয়"
-                          value="সিলেট"
-                        />
-                        <Select.Item
-                          label="চট্টগ্রাম বিভাগীয় কার্যালয়"
-                          value="চট্টগ্রাম"
-                        />
+                        {officeAddress.map((address) => (
+                          <Select.Item
+                            key={address.sl}
+                            label={address.Area}
+                            value={address.email_address}
+                          />
+                        ))}
                       </Select>
                     </FormControl>
                   </VStack>
