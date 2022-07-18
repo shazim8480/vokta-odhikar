@@ -40,7 +40,8 @@ const ComplaintInfo = ({ navigation }) => {
   // console.log(officeAddress);
 
   // state for selecting officeAddress value => email_address//
-  let [officeAddressValue, setOfficeAddressValue] = useState("");
+  let [officeAddressValue, setOfficeAddressValue] = useState();
+  let [selectedOfficeIndex, setSelectedOfficeIndex] = useState();
 
   useEffect(() => {
     // call for form submission API
@@ -89,7 +90,11 @@ const ComplaintInfo = ({ navigation }) => {
     } else num_att = 0;
 
     if (officeAddressValue) {
-      formData.append("officeAddressValue_email", officeAddressValue);
+      console.log(officeAddressValue);
+      formData.append(
+        "officeAddressValue_email",
+        officeAddressValue.email_address
+      );
     }
 
     /* append input field values to formData */
@@ -144,13 +149,13 @@ const ComplaintInfo = ({ navigation }) => {
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
             // console.log(userfile1);
-            if (userFiles && officeAddressValue) {
+            if (userFiles.length > 0 && officeAddressValue) {
               formSubmission(values, actions);
             } else if (!officeAddressValue) {
               alert("কার্যালয় নির্বাচন আবশ্যক!");
             }
             // issue here : userFiles empty is not showing alert //
-            else if (!userFiles) {
+            else if (userFiles.length < 1) {
               alert("রশিদ সংযুক্ত করুন!");
             }
           }}
@@ -192,17 +197,6 @@ const ComplaintInfo = ({ navigation }) => {
                     {props.errors.inst_address}
                   </Text>
                 )}
-                <Input
-                  onChangeText={props.handleChange("c_address")}
-                  onBlur={props.handleBlur("c_address")}
-                  placeholder=""
-                  value={props.values.c_address}
-                />
-                {props.touched.c_address && props.errors.c_address && (
-                  <Text style={styles.errorMessage}>
-                    {props.errors.c_address}
-                  </Text>
-                )}
 
                 <HStack paddingTop="15px" paddingBottom="5px">
                   <VStack justifyContent="flex-start" alignItems="center">
@@ -218,25 +212,30 @@ const ComplaintInfo = ({ navigation }) => {
                           bg: "white",
                           endIcon: <CheckIcon size={5} />,
                         }}
-                        selectedValue={officeAddressValue}
+                        selectedValue={selectedOfficeIndex}
                         value={props.values.officeAddressValue}
-                        onValueChange={(itemValue) =>
-                          setOfficeAddressValue(itemValue)
-                        }
+                        onValueChange={(itemValue) => {
+                          console.log(itemValue);
+                          setOfficeAddressValue(officeAddress[itemValue]);
+                          setSelectedOfficeIndex(itemValue);
+                        }}
                         mt="0.5"
                       >
-                        {officeAddress.map((address) => (
+                        {officeAddress.map((address, idx) => (
                           <Select.Item
                             key={address.sl}
                             label={address.Area}
-                            value={address.email_address}
+                            value={idx}
                           />
                         ))}
                       </Select>
                     </FormControl>
                   </VStack>
                 </HStack>
-
+                <Input
+                  placeholder="কার্যালয় ঠিকানা"
+                  value={officeAddressValue && officeAddressValue.address}
+                />
                 <Input
                   onChangeText={props.handleChange("complaint")}
                   onBlur={props.handleBlur("complaint")}
