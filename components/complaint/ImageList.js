@@ -4,11 +4,10 @@ import * as DocumentPicker from "expo-document-picker";
 import { AntDesign } from "@expo/vector-icons";
 import Carousel from "react-native-snap-carousel";
 import { IconButton, HStack, VStack } from "native-base";
+
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const ImageList = (props) => {
-  // const [userFiles, setUserFiles] = useState([]);
-
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({
       type: "*/*",
@@ -57,7 +56,7 @@ const ImageList = (props) => {
         />
         <VStack>
           <HStack
-            justifyContent="center"
+            justifyContent="flex-start"
             alignItems="center"
             marginTop="10px"
             padding="10px"

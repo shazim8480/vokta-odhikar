@@ -6,8 +6,17 @@ import MainButton from "../shared/MainButton";
 import { Formik } from "formik";
 import * as yup from "yup";
 import AppLoader from "../shared/AppLoader";
+import "react-native-get-random-values";
+const { v4: uuidv4 } = require("uuid");
 
-import { FormControl, Select, CheckIcon, VStack, HStack } from "native-base";
+import {
+  FormControl,
+  Select,
+  CheckIcon,
+  VStack,
+  HStack,
+  TextArea,
+} from "native-base";
 import ImageList from "./ImageList";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -28,6 +37,13 @@ const complaintDataSchema = yup.object({
 });
 
 const ComplaintInfo = ({ navigation }) => {
+  // get device ID and set it as USER ID
+
+  let uuid = uuidv4();
+  // await SecureStore.setItemAsync("secure_deviceid", JSON.stringify(uuid));
+  // let fetchUUID = await SecureStore.getItemAsync("secure_deviceid");
+  JSON.stringify(uuid);
+  console.log(uuid);
   const [userFiles, setUserFiles] = useState([]);
   // console.log(userFiles);
 
@@ -104,9 +120,8 @@ const ComplaintInfo = ({ navigation }) => {
 
     formData.append("num_att", num_att);
 
-    // static u_id//
-    var u_id = "1";
-    formData.append("u_id", u_id);
+    // device u_id//
+    formData.append("u_id", uuid);
     /* Now POST your formData: */
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -148,7 +163,6 @@ const ComplaintInfo = ({ navigation }) => {
           }}
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
-            // console.log(userfile1);
             if (userFiles.length > 0 && officeAddressValue) {
               formSubmission(values, actions);
             } else if (!officeAddressValue) {
@@ -232,7 +246,16 @@ const ComplaintInfo = ({ navigation }) => {
                     </FormControl>
                   </VStack>
                 </HStack>
-                <Input
+                <TextArea
+                  h={40}
+                  p={3}
+                  w="85%"
+                  totalLines={6}
+                  isDisabled
+                  backgroundColor="white"
+                  marginLeft="20px"
+                  marginTop="20px"
+                  marginBottom="5px"
                   placeholder="কার্যালয় ঠিকানা"
                   value={officeAddressValue && officeAddressValue.address}
                 />
