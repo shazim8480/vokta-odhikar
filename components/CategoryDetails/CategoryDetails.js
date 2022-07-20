@@ -1,5 +1,5 @@
 // import React in our code
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // import all the components we are going to use
 import {
@@ -22,9 +22,6 @@ const CategoryDetails = ({ facts }) => {
   // console.log(facts);
   // default active selector
   const [activeSections, setActiveSections] = useState([]);
-  // useEffect(() => {
-  //   facts.length == 1 ? setActiveSections(facts) : setActiveSections([]);
-  // }, [activeSections]);
   // accordion click on change modifier
   const setSections = (sections) => {
     // console.log(sections);
@@ -55,7 +52,7 @@ const CategoryDetails = ({ facts }) => {
         transition="backgroundColor"
       >
         <Animatable.Text
-          animation={isActive ? "fadeIn" : undefined}
+          // animation={isActive ? "fadeIn" : undefined}
           style={{ textAlign: "left", fontWeight: "600", color: "gray" }}
         >
           {section.description}

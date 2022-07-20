@@ -45,9 +45,9 @@ const DetailsNavigator = ({ navigation, route }) => {
 const openDialScreen = () => {
   let number = "";
   if (Platform.OS === "ios") {
-    number = "telprompt:${01777753668}";
+    number = "telprompt:${+8801777753668}";
   } else {
-    number = "tel:${01777753668}";
+    number = "tel:${+8801777753668}";
   }
   Linking.openURL(number);
 };

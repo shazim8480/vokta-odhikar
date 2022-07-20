@@ -43,7 +43,7 @@ const ComplaintInfo = ({ navigation }) => {
   // await SecureStore.setItemAsync("secure_deviceid", JSON.stringify(uuid));
   // let fetchUUID = await SecureStore.getItemAsync("secure_deviceid");
   JSON.stringify(uuid);
-  console.log(uuid);
+  // console.log(uuid);
   const [userFiles, setUserFiles] = useState([]);
   // console.log(userFiles);
 
@@ -167,9 +167,7 @@ const ComplaintInfo = ({ navigation }) => {
               formSubmission(values, actions);
             } else if (!officeAddressValue) {
               alert("কার্যালয় নির্বাচন আবশ্যক!");
-            }
-            // issue here : userFiles empty is not showing alert //
-            else if (userFiles.length < 1) {
+            } else if (userFiles.length < 1) {
               alert("রশিদ সংযুক্ত করুন!");
             }
           }}
