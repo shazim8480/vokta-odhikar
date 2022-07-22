@@ -23,7 +23,7 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 // modal image container //
 
 const ImageContainer = styled.View`
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const HomeScreen = ({ navigation }) => {
@@ -37,19 +37,17 @@ const HomeScreen = ({ navigation }) => {
             <Modal.Header>
               <Modal.CloseButton />
               <Modal.Body>
-                <AspectRatio ratio={16 / 9}>
-                  <ImageContainer>
-                    <Image
-                      style={{
-                        width: SCREEN_WIDTH,
-                        height: SCREEN_WIDTH / 1.7,
-                      }}
-                      resizeMode="cover"
-                      source={modalImage}
-                      alt="modalImage"
-                    />
-                  </ImageContainer>
-                </AspectRatio>
+                <ImageContainer>
+                  <Image
+                    style={{
+                      width: SCREEN_WIDTH - 100,
+                      height: SCREEN_WIDTH / 1.8,
+                    }}
+                    resizeMode="contain"
+                    source={modalImage}
+                    alt="modalImage"
+                  />
+                </ImageContainer>
               </Modal.Body>
             </Modal.Header>
           </Modal.Content>
@@ -69,6 +67,7 @@ const HomeScreen = ({ navigation }) => {
     </HomeBackground>
   ) : (
     <HomeBackground>
+      <ModalShow />
       <Dashboard navigation={navigation} />
     </HomeBackground>
   );

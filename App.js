@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Header from "./components/shared/Header";
 import HomeScreen from "./screens/HomeScreen";
 import { NativeBaseProvider } from "native-base";
-import { Linking, Platform, View } from "react-native";
+import { Linking, Platform } from "react-native";
 import { colors } from "./constants/colors";
 import { FontAwesome } from "@expo/vector-icons";
 import DetailsScreen from "./screens/DetailsScreen";
