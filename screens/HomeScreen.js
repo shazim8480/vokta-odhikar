@@ -67,7 +67,6 @@ const HomeScreen = ({ navigation }) => {
     </HomeBackground>
   ) : (
     <HomeBackground>
-      <ModalShow />
       <Dashboard navigation={navigation} />
     </HomeBackground>
   );

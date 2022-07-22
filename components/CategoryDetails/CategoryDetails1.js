@@ -18,11 +18,11 @@ const CategoryDetails = ({ facts }) => {
     return (
       <>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{item.item.subtitle}</Text>
+          <Text style={styles.headerText}>{item.subtitle}</Text>
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.contentText}>{item.item.description}</Text>
+          <Text style={styles.contentText}>{item.description}</Text>
         </View>
       </>
     );
@@ -35,7 +35,7 @@ const CategoryDetails = ({ facts }) => {
         <FlatList
           data={facts}
           renderItem={renderItem}
-          keyExtractor={(item) => item.subtitle}
+          keyExtractor={(item) => item.id}
         />
       </SafeAreaView>
     </>
