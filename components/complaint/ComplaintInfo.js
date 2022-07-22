@@ -147,19 +147,19 @@ const ComplaintInfo = ({ navigation }) => {
       ) : (
         <Formik
           initialValues={{
-            inst_name: "institute",
-            inst_address: "dhaka",
-            c_address: "dhaka",
-            complaint: "complaint",
-            name: "name",
-            f_name: "father",
-            m_name: "mother",
-            p_address: "present",
-            permanentAddress: "permanentAddress",
-            occupation: "occupation",
-            mobile: "88012121212",
-            email: "asasa@dncrp.gov.bd",
-            nid: "121212",
+            inst_name: "",
+            inst_address: "",
+            c_address: "",
+            complaint: "",
+            name: "",
+            f_name: "",
+            m_name: "",
+            p_address: "",
+            permanentAddress: "",
+            occupation: "",
+            mobile: "",
+            email: "",
+            nid: "",
           }}
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
