@@ -7,14 +7,15 @@
       "developmentClient": true,
       "distribution": "internal"
     },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {
+    "debug": {
       "android": {
         "buildType": "apk"
       }
-    }
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
   },
   "submit": {
     "production": {}
