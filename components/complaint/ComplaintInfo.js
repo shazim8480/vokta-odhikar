@@ -28,8 +28,8 @@ const complaintDataSchema = yup.object({
   name: yup.string().required("অভিযোগকারীর নাম আবশ্যক*"),
   f_name: yup.string().required("পিতার নাম আবশ্যক*"),
   m_name: yup.string().required("মাতার নাম আবশ্যক*"),
-  p_address: yup.string().required("বর্তমান ঠিকানা আবশ্যক*"),
-  permanentAddress: yup.string().required("স্থায়ী ঠিকানা আবশ্যক*"),
+  p_address: yup.string().required("স্থায়ী ঠিকানা আবশ্যক*"),
+  c_address: yup.string().required("বর্তমান ঠিকানা আবশ্যক*"),
   occupation: yup.string().required("পেশার নাম আবশ্যক*"),
   mobile: yup.number().required("মোবাইল নম্বর আবশ্যক*"),
   email: yup.string().email("অনুগ্রহ করে সঠিক ই-মেইল প্রদান করুন*"),
@@ -147,19 +147,18 @@ const ComplaintInfo = ({ navigation }) => {
       ) : (
         <Formik
           initialValues={{
-            inst_name: "",
-            inst_address: "",
-            c_address: "",
-            complaint: "",
-            name: "",
-            f_name: "",
-            m_name: "",
-            p_address: "",
-            permanentAddress: "",
-            occupation: "",
-            mobile: "",
-            email: "",
-            nid: "",
+            inst_name: "Vokta",
+            inst_address: "Dhaka",
+            complaint: "Not good product",
+            name: "Alim",
+            f_name: "father",
+            m_name: "mother",
+            c_address: "Badda",
+            p_address: "Khulna",
+            occupation: "Developer",
+            mobile: "01222333555",
+            email: "alim@dncrp.gov.bd",
+            nid: "1234567895",
           }}
           validationSchema={complaintDataSchema}
           onSubmit={(values, actions) => {
@@ -305,10 +304,22 @@ const ComplaintInfo = ({ navigation }) => {
                   <Text style={styles.errorMessage}>{props.errors.m_name}</Text>
                 )}
                 <Input
+                  onChangeText={props.handleChange("c_address")}
+                  onBlur={props.handleBlur("c_address")}
+                  multiline={true}
+                  placeholder="বর্তমান ঠিকানা"
+                  value={props.values.c_address}
+                />
+                {props.touched.c_address && props.errors.c_address && (
+                  <Text style={styles.errorMessage}>
+                    {props.errors.c_address}
+                  </Text>
+                )}
+                <Input
                   onChangeText={props.handleChange("p_address")}
                   onBlur={props.handleBlur("p_address")}
                   multiline={true}
-                  placeholder="বর্তমান ঠিকানা"
+                  placeholder="স্থায়ী ঠিকানা"
                   value={props.values.p_address}
                 />
                 {props.touched.p_address && props.errors.p_address && (
@@ -316,19 +327,6 @@ const ComplaintInfo = ({ navigation }) => {
                     {props.errors.p_address}
                   </Text>
                 )}
-                <Input
-                  onChangeText={props.handleChange("permanentAddress")}
-                  onBlur={props.handleBlur("permanentAddress")}
-                  multiline={true}
-                  placeholder="স্থায়ী ঠিকানা"
-                  value={props.values.permanentAddress}
-                />
-                {props.touched.permanentAddress &&
-                  props.errors.permanentAddress && (
-                    <Text style={styles.errorMessage}>
-                      {props.errors.permanentAddress}
-                    </Text>
-                  )}
                 <View style={styles.nameInputContainer}>
                   <Input
                     onChangeText={props.handleChange("occupation")}
