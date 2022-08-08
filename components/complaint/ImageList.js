@@ -1,6 +1,6 @@
 import { View, Dimensions, Image } from "react-native";
 import React, { useState } from "react";
-import * as DocumentPicker from "expo-document-picker";
+import DocumentPicker from "react-native-document-picker";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import Carousel from "react-native-snap-carousel";
@@ -13,9 +13,7 @@ const ImageList = ({ userFiles, setUserFiles }) => {
   // console.log(updatedUserFiles.length);
 
   const pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({
-      type: "*/*",
-    });
+    let result = await DocumentPicker.pickMultiple();
     // setUserFiles(result);
     setUserFiles((scr) => {
       return [...scr, result];
