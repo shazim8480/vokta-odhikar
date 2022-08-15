@@ -12,24 +12,30 @@ const ImageList = ({ userFiles, setUserFiles }) => {
   const [updatedUserFiles, setUpdatedUserFiles] = useState(userFiles);
   // console.log(updatedUserFiles.length);
 
+  /////// issue here: /// pickDocument does not work when updated selection//
   const pickDocument = async () => {
-    let result = await DocumentPicker.pickMultiple();
-    // setUserFiles(result);
-    setUserFiles((scr) => {
-      return [...scr, result];
-    });
-    // console.log(result);
-    console.log(userFiles);
+    try {
+      let result = await DocumentPicker.pickMultiple();
+      setUserFiles(result);
+      // setUserFiles((scr) => {
+      //   return [...scr, result];
+      // });
+      // console.log(result);
+      console.log(userFiles);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // onPress iconButton delete document handler //
   // ISSUE HERE : DOESN'T WORK //
-  const deleteDocument = () => {
-    setUpdatedUserFiles(
-      updatedUserFiles.filter(
-        (updatedItem) => updatedItem.name !== userFiles.name
-      )
-    );
+  // setUpdatedUserFiles(
+  //   updatedUserFiles.filter(
+  //     (updatedItem) => updatedItem.name !== userFiles.name
+  //   )
+  // );
+  const deleteDocument = (uri) => (e) => {
+    setUserFiles(userFiles.filter((updatedItem) => updatedItem.uri !== uri));
     console.log(updatedUserFiles);
   };
 

@@ -1,3 +1,4 @@
+import "expo-dev-client";
 import React, { useCallback, useEffect, useState } from "react";
 import Header from "./components/shared/Header";
 import HomeScreen from "./screens/HomeScreen";
