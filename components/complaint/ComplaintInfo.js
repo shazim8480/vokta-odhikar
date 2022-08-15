@@ -98,7 +98,8 @@ const ComplaintInfo = ({ navigation }) => {
       userFiles.forEach((userfile, index) => {
         // console.log(userfile);
         formData.append(`userfile${index + 1}`, {
-          type: userfile.mimeType,
+          fileCopyUri: userfile.fileCopyUri,
+          type: userfile.type,
           uri: userfile.uri,
           name: userfile.name,
         });
