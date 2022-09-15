@@ -34,12 +34,14 @@ const ImageList = ({ userFiles, setUserFiles }) => {
   //     (updatedItem) => updatedItem.name !== userFiles.name
   //   )
   // );
-  const deleteDocument = (uri) => (e) => {
-    setUserFiles(userFiles.filter((updatedItem) => updatedItem.uri !== uri));
-    console.log(updatedUserFiles);
+  const deleteDocument = (uri) => {
+    setUpdatedUserFiles(
+      userFiles.filter((updatedItem) => updatedItem.uri !== uri)
+    );
+    console.log(userFiles);
   };
 
-  const renderItem = (item, index) => {
+  const renderItem = (item, index, uri) => {
     // console.log(item);
     return (
       <VStack justifyContent="center" alignItems="center">
@@ -56,7 +58,7 @@ const ImageList = ({ userFiles, setUserFiles }) => {
         />
         {userFiles && (
           <IconButton
-            onPress={deleteDocument}
+            onPress={() => deleteDocument(uri)}
             icon={<AntDesign name="delete" size={24} />}
             _icon={{
               color: "red",

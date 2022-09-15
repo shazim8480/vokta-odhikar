@@ -1,13 +1,17 @@
 import { StyleSheet, View, Dimensions, Text } from "react-native";
+import { Checkbox, Center } from "native-base";
 import React, { useState, useEffect } from "react";
 import MainTitle from "../shared/MainTitle";
 import Input from "../shared/Input";
 import MainButton from "../shared/MainButton";
+// import FormCheckbox from "../shared/FormCheckbox";
 import { Formik } from "formik";
 import * as yup from "yup";
 import AppLoader from "../shared/AppLoader";
 import "react-native-get-random-values";
 const { v4: uuidv4 } = require("uuid");
+
+import { colors } from "../../constants/colors";
 
 import {
   FormControl,
@@ -58,6 +62,9 @@ const ComplaintInfo = ({ navigation }) => {
   // state for selecting officeAddress value => email_address//
   let [officeAddressValue, setOfficeAddressValue] = useState();
   let [selectedOfficeIndex, setSelectedOfficeIndex] = useState();
+
+  // for selecting terms //
+  const [checkBoxValues, setCheckBoxValues] = useState([]);
 
   useEffect(() => {
     // call for form submission API
@@ -178,14 +185,12 @@ const ComplaintInfo = ({ navigation }) => {
               <View>
                 <MainTitle>অভিযোগ</MainTitle>
               </View>
-
               <View style={{ marginTop: 15 }}>
                 <FormControl.Label paddingLeft="22px">
                   প্রমাণস্বরূপ রশিদের ছবি সংযুক্ত করুন
                 </FormControl.Label>
                 <ImageList userFiles={userFiles} setUserFiles={setUserFiles} />
               </View>
-
               <View style={styles.inputContainer}>
                 <Input
                   onChangeText={props.handleChange("inst_name")}
@@ -269,11 +274,9 @@ const ComplaintInfo = ({ navigation }) => {
                   </Text>
                 )}
               </View>
-
               {/* complainer */}
               <View style={styles.emptyView}></View>
               <MainTitle style={styles.text}>অভিযোগকারীর তথ্য</MainTitle>
-
               <View style={styles.inputContainer}>
                 <Input
                   onChangeText={props.handleChange("name")}
@@ -374,11 +377,34 @@ const ComplaintInfo = ({ navigation }) => {
                 )}
               </View>
 
-              <MainButton
-                onPress={props.handleSubmit}
-                style={styles.mainButton}
-                title="অভিযোগ করুন"
-              />
+              {/* checkbox  */}
+              <Checkbox
+                colorScheme="info"
+                onChange={setCheckBoxValues}
+                value={checkBoxValues}
+                marginTop={5}
+                marginLeft={5}
+              >
+                আমি স্বীকার করছি উপরের সকল তথ্য সঠিক
+              </Checkbox>
+
+              {/* // submit button */}
+              {checkBoxValues ? (
+                <MainButton
+                  disabled={false}
+                  onPress={props.handleSubmit}
+                  style={styles.mainButton}
+                  title="অভিযোগ করুন"
+                />
+              ) : (
+                <MainButton
+                  type="disabled"
+                  disabled={true}
+                  onPress={props.handleSubmit}
+                  style={styles.mainButton}
+                  title="অভিযোগ করুন"
+                />
+              )}
             </View>
           )}
         </Formik>
